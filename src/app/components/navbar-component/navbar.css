@@ -1,0 +1,22 @@
+.navbar {
+    background-color: azure;
+
+    border-bottom: 1px solid black;
+
+    font-size: 15px;
+    font-style: italic;
+    justify-content: center;
+    justify-items: center;
+    
+    margin-top: 25px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 25px;
+
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+
+    width: 500px;
+}
