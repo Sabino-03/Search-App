@@ -12,5 +12,7 @@ export class HelloComponent {
   //DECORATORE CHE CONSENTE DI FAR PASSARE (DA PARTE DI COMPONENTE PADRE) UN VALORE AL COMPONENTE FIGLIO
 
   constructor() {}
+
+  welcome() {}
   
 }
