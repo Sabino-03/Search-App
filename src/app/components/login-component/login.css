@@ -1,4 +1,23 @@
-.div-components {
+.div-logIn-route {
+    display: grid;
+
+    justify-content: center;
+
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.h1-title {
+    color: color-mix(in srgb-linear, red 33%, green 33%, blue 33%);
+
+    display: grid;
+    
+    font-size: 25px;
+
+    justify-content: center;
+}
+
+.div-logIn-component {
     background-color: white;
 
     border-radius: 15px;
@@ -14,37 +33,4 @@
     width: fit-content;
     min-width: min-content;
     max-width: max-content;
-}
-
-.h1 {
-    display: grid;
-    
-    font-size: 25px;
-    font-style: italic;
-
-    justify-content: center;
-    justify-items: center;
-}
-
-.navbar {
-    background-color: azure;
-
-    border-bottom: 1px solid black;
-
-    font-size: 15px;
-    font-style: italic;
-    justify-content: center;
-    justify-items: center;
-    
-    margin-top: 25px;
-    margin-left: 20px;
-    margin-right: 20px;
-    margin-bottom: 0px;
-
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 10px;
-
-    width: 500px;
 }

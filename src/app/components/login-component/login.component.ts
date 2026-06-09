@@ -1,26 +1,24 @@
 import { DOCUMENT } from "@angular/common";
 import { Component, Inject } from "@angular/core";
 import { Router } from "@angular/router";
-import { BehaviorSubject, fromEvent, Observable, of } from "rxjs";
-import { debounceTime, map } from "rxjs/operators";
+import { BehaviorSubject, fromEvent } from "rxjs";
+import { debounceTime, map, tap } from "rxjs/operators";
 import { AuthService } from "../../services/auth.service";
 
 @Component({
     selector: 'login-component',
     templateUrl: './login.html',
-    styleUrl: './login.css'
+    styleUrls: [
+        '../button-component/button.css',
+        './login.css',
+        '../navbar-component/navbar.css'
+    ]
 })
 
 export class LoginComponent {
 
-    usernameTerm$ : Observable<string> = of('');
-    passwordTerm$ : Observable<string> = of('');
-
-    username$ : BehaviorSubject<string> = new BehaviorSubject('');
-    password$ : BehaviorSubject<string> = new BehaviorSubject('');
-
-    usernameToken$ : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    passwordToken$ : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    usernameTerm$ : BehaviorSubject<string> = new BehaviorSubject('');
+    passwordTerm$ : BehaviorSubject<string> = new BehaviorSubject('');
 
     constructor(
         @Inject(DOCUMENT)
@@ -29,66 +27,68 @@ export class LoginComponent {
         private authService : AuthService
     ) {}
 
-    Username() : BehaviorSubject<string> {
+    getUserName() : BehaviorSubject<string> {
 
-        const usernameNavBar : HTMLElement | null = this.document.getElementById('username-box');
+        const usernameNavBar = this.document.getElementById('username-text-box');
+
         if(usernameNavBar) {
-            this.usernameTerm$ = fromEvent<KeyboardEvent>(usernameNavBar, 'input')
-            .pipe(
-                map((event : KeyboardEvent) => (event.currentTarget as HTMLInputElement).value),
-                debounceTime(1000),
-                //tap(console.log)
-            )
 
-            this.usernameTerm$
+            fromEvent<KeyboardEvent>(usernameNavBar, 'input')
+            .pipe(
+                map((input : KeyboardEvent) => (input.currentTarget as HTMLInputElement).value.toString()),
+                //toLowerCase_Replace(),
+                debounceTime(1000),
+                tap((value : string) => console.log('USERNAME : ' + value))
+            )
             .subscribe(
-                (value) => {
-                    console.log('USERNAME : ' + value);
-                    this.username$.next(value);
-                },
+                (value : string) => { this.usernameTerm$.next(value); },
                 (err) => console.log('error' + err),
                 () => console.log('completed')
             )
+
         }
 
-        return this.username$
+        return this.usernameTerm$;
 
     }
 
-    Password() : BehaviorSubject<string> {
+    getPassWord() : BehaviorSubject<string> {
 
-        const passwordNavBar : HTMLElement | null = this.document.getElementById('password-box');
+        const passwordNavBar = this.document.getElementById('password-text-box');
+
         if(passwordNavBar) {
-            this.passwordTerm$ = fromEvent<KeyboardEvent>(passwordNavBar, 'input')
-            .pipe(
-                map((event : KeyboardEvent) => (event.currentTarget as HTMLInputElement).value),
-                debounceTime(1000),
-                //tap(console.log)
-            )
 
-            this.passwordTerm$
+            fromEvent<KeyboardEvent>(passwordNavBar, 'input')
+            .pipe(
+                map((input : KeyboardEvent) => (input.currentTarget as HTMLInputElement).value.toString()),
+                //toLowerCase_Replace(),
+                debounceTime(1000),
+                tap((value : string) => console.log('PASSWORD : ' + value))
+            )
             .subscribe(
-                (value) => {
-                    console.log('PASSWORD : ' + value);
-                    this.password$.next(value);
-                },
+                (value : string) => { this.passwordTerm$.next(value); },
                 (err) => console.log('error' + err),
                 () => console.log('completed')
             )
+
         }
 
-        return this.password$
+        return this.passwordTerm$;
 
     }
 
-    logIn() : boolean { return this.authService.isAuthenticated(this.username$.getValue(), this.password$.getValue()); }
+    logIn() : void {
 
-    moveToHome() : void {
-
-        if(this.logIn())
-            this.router.navigate(['home']);
-        else
-            this.router.navigate(['']);
+        this.authService.isAuthenticated(this.usernameTerm$.getValue(), this.passwordTerm$.getValue())
+        .pipe(
+            //skip(1), //SI UTILIZZA skip(1) PERCHÈ isLogged$ NON RISULTA AGGIORNATO => DA ULTIME OPERAZIONI
+            tap((token : boolean) => token ? this.router.navigate(['home']) : this.router.navigate(['']))
+        )
+        .subscribe(
+            (userToken : boolean) => {},
+            (err) => console.log('error' + err),
+            () => console.log('completed LogIn-Component')
+        )
 
     }
 

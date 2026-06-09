@@ -1,9 +1,14 @@
-<div>
-    <h1 class="h1">Search App</h1>
-        <div class="div-components">
-            <p><input class="navbar" id="username-box" placeholder="Username..." type="text-box" (input)="Username()"></p>
-            <p><input class="navbar" id="password-box" placeholder="Password..." type="text-box" (input)="Password()"></p>
+<div class="div-logIn-route" >
+
+    <h1 class="h1-title" >Search-App</h1>
+
+        <div class="div-logIn-component" >
+
+            <input class="logIn-NavBar" id="username-text-box" type="text" placeholder="USERNAME..." (input)="getUserName()" >
+
+            <input class="logIn-NavBar" id="password-text-box" type="text" placeholder="PASSWORD..." (input)="getPassWord()" >
             
-                <p><button class="button" id="loginButton" type="button" (click)="logIn()" routerLink="/home">Login</button></p>
+            <button class="logIn-Button" id="loginButton" type="button" (click)="logIn()" routerlink="/home" >LOGIN</button>
+
         </div>
 </div>

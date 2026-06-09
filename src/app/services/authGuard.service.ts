@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from "@angular/router";
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from "@angular/router";
 import { Observable } from "rxjs";
 import { catchError, first, take, tap } from "rxjs/operators";
 import { AuthService } from "./auth.service";
@@ -22,19 +22,15 @@ export class AuthGuard implements CanActivate {
 
         return this.authService.isLoggedIn$
         .pipe(
-          first(),
+          first(), //COMPLETAMENTO
           tap((isAuth : boolean) => {
             if(isAuth === true) {
-
               console.log('Utente Autenticato');
               return true;
-
             }
             else {
-
               console.log('Utente NON Autenticato');
               return false;
-
             }
           })
         )
