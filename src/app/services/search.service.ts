@@ -1,38 +1,85 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SearchPosts } from './posts.service';
-import { SearchUsers } from './users.service';
+import { BehaviorSubject } from 'rxjs';
+import { catchError, map, switchMap, take, toArray } from 'rxjs/operators';
+import { User } from '../models/user';
+import { Post } from '../models/post';
+import { UserMod } from '../models/userMod';
+import { PostMod } from '../models/postMod';
 
 @Injectable({ providedIn: 'root' })
 export class SearchService {
 
-  searchTag : string = '';
+  numOfUsers : number = 1;
+  userList$ : BehaviorSubject<UserMod[]> = new BehaviorSubject<UserMod[]>([]);
 
-  constructor(
-    public postsService: SearchPosts,
-    public usersService: SearchUsers,
-  ) {}
+  numOfPosts : number = 1;
+  postList$ : BehaviorSubject<PostMod[]> = new BehaviorSubject<PostMod[]>([]);
 
-  search(tag : string) {
-    this.searchTag = tag;
+  constructor( private http : HttpClient ) {}
 
-    switch (this.searchTag) {
-      case 'users' : {
-        console.log(`Searching ${tag}...`);
-        this.usersService.users();
-      }
-      break;
+  onClickSearch( inputTerm : string ) : void {
 
-      case 'posts' : {
-        console.log(`Searching ${tag}...`);
-        this.postsService.posts();
-      }
-      break;
+    switch (inputTerm) {
 
-      default : {
-        console.log(`Searching ${tag}...`);
-        throw new Error('Search Error');
-      }
+      case "users" : { this.onClickSearchUser(inputTerm); }
+        break;
+      
+      case "posts" : { this.onClickSearchPost(inputTerm); }
+        break;
+
+      default :
+        throw new Error('Input NOT Valid : ');
+
     }
 
   }
+
+  onClickSearchUser( inputTerm : string ) : void {
+
+    this.http.get<User[]>(`https://jsonplaceholder.typicode.com/${inputTerm}/`)
+    .pipe(
+      //catchError((err : Error) => { throw new Error('Input NOT Valid : ' + err) }),
+      switchMap((users : User[]) => users),
+      take(this.numOfUsers),
+      map((user : User) => {
+        return {
+          Nome : user.name,
+          UserName : user.username,
+          Email : user.email
+        }
+      }),
+      toArray()
+    )
+    .subscribe(
+      (list : UserMod[]) => { return this.userList$.next(list); },
+      (err) => console.log('error' + err),
+      () => console.log('completed')
+    )
+
+  }
+
+  onClickSearchPost( inputTerm : string ) : void {
+
+    this.http.get<Post[]>(`https://jsonplaceholder.typicode.com/${inputTerm}/`)
+    .pipe(
+      //catchError((err : Error) => { throw new Error('Input NOT Valid : ' + err) }),
+      switchMap((users : Post[]) => users),
+      take(this.numOfPosts),
+      map((user : Post) => {
+        return {
+          Titolo : user.title,
+          Testo : user.body,
+        }
+      }),
+      toArray()
+    )
+    .subscribe(
+      (list : PostMod[]) => { return this.postList$.next(list); },
+      (err) => console.log('error' + err),
+      () => console.log('completed')
+    )
+
+  }
+
 }
