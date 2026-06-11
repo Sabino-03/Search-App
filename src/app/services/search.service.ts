@@ -29,7 +29,7 @@ export class SearchService {
         break;
 
       default :
-        throw new Error('Input NOT Valid : ');
+        throw new Error('Input NOT Valid');
 
     }
 

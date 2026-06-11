@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { SearchService } from "./search.service";
 
 @Injectable({ providedIn: 'root' })
-export class NumberOf {
+export class NumberOfService {
 
   constructor( private searchService : SearchService ) {}
 
@@ -10,7 +10,7 @@ export class NumberOf {
 
   subNumberOfUsers() {
     if(this.searchService.numOfUsers > 0)
-      this.searchService.numOfUsers --
+      this.searchService.numOfUsers -- ;
     else
       throw new Error('Operazione NON Eseguibile');
   }
@@ -19,7 +19,7 @@ export class NumberOf {
 
   subNumberOfPosts() {
     if(this.searchService.numOfPosts > 0)
-      this.searchService.numOfPosts --
+      this.searchService.numOfPosts -- ;
     else
       throw new Error('Operazione NON Eseguibile');
   }
