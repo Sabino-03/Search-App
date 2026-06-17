@@ -1,3 +1,11 @@
 <div>
-    <p><button type="button" ></button></p>
+    <button
+        [class]="type_btn() + ' ' + size_btn() + ' ' + variant_btn() + '-Button'"
+        [disabled]="!isActivated_btn"
+        [type]="type_btn()"
+        (click)="handleClick()" >
+
+        {{ label_btn() }}
+
+    </button>
 </div>
