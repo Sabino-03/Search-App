@@ -1,5 +1,40 @@
 .navbar {
-    background-color: azure;
+    font-size: 15px;
+    font-style: normal;
+    justify-content: center;
+    justify-items: center;
+
+    margin-top: 25px;
+    margin-left: 25px;
+    margin-right: 25px;
+    margin-bottom: 25px;
+
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+
+    width: 750px;
+}
+
+.dark {
+    background-color:#1e1e1e;
+
+    border-color: #252525;
+    border: 2px solid;
+    border-radius: 20px;
+}
+
+.light {
+    background-color:azure;
+
+    border-color: rgb(0, 125, 250);
+    border: 2px solid;
+    border-radius: 20px;
+}
+
+.log-NavBar {
+    background-color:azure;
 
     border-bottom: 1px solid black;
 

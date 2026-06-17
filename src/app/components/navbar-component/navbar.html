@@ -1,5 +1,8 @@
 <div>
-
-    <p><input id="NavBar" type="text-box"></p>
-
+    <input
+        [class]="'navbar' + ' ' + theme_nb()"
+        [disabled]="!isActivated_nb"
+        [placeholder]="text_nb()"
+        [type]="'text'"
+        [formControl]="inputControl" >
 </div>

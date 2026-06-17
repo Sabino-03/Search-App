@@ -1,47 +1,48 @@
-import { DOCUMENT } from "@angular/common";
-import { Component, EventEmitter, Inject, Output } from "@angular/core";
-import { BehaviorSubject, fromEvent, Observable, of } from "rxjs";
-import { catchError, debounceTime, map, retry } from 'rxjs/operators';
+import { Component, EventEmitter, input, Input, InputSignal, OnInit, Output } from "@angular/core";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { debounceTime, distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { toLowerCase_Replace } from "../../core/rxjs/operators/toLowerCaseAndReplace";
 
 @Component({
     selector: 'navbar-component',
     templateUrl: './navbar.html',
-    styleUrl: './navbar.css'
+    styleUrl: './navbar.css',
+    imports: [ ReactiveFormsModule ]
 })
 
-export class NavbarComponent {
+export class NavBarComponent implements OnInit {
 
-    @Output() emittedValue = new EventEmitter<string>();
-    
-    searchTerm$ : BehaviorSubject<string> = new BehaviorSubject('');
+    @Input() isActivated_nb : boolean = true; //ABILITA/DISABILITA LA NAVBAR
+    text_nb : InputSignal<string> = input.required(); //TESTO DELLA NAVBAR
+    theme_nb : InputSignal<'dark' | 'light'> = input.required(); //TIPO HTML + TIPO CSS
+    @Output() inputTerm : EventEmitter<string> = new EventEmitter<string>();
 
-    constructor(
-        @Inject(DOCUMENT)
-        private document : Document,
-    ) {}
+    inputControl : FormControl<string>;
 
-    input() : string | void {
+    constructor() {
+        
+        this.inputControl = new FormControl();
 
-        const navbar = this.document.getElementById('NavBar');
-        if(navbar) {
-            fromEvent<KeyboardEvent>(navbar, 'input')
-            .pipe(
-                map((input : KeyboardEvent) => (input.currentTarget as HTMLInputElement).value),
-                //toLowerCase_Replace(),
-                debounceTime(1000),
-            )
-            .subscribe(
-                (value) => {
-                    this.searchTerm$.next(value);
-
-                    this.emittedValue.emit(this.searchTerm$.getValue());
-                },
-                (err) => console.log('error' + err),
-                () => console.log('completed')
-            )
-        }
+        this.inputControl.valueChanges
+        .pipe(
+            map((inputTerm : string) => inputTerm),
+            debounceTime(1000),
+            toLowerCase_Replace(),
+            distinctUntilChanged(),
+            tap(console.log)
+        )
+        .subscribe(
+            (value : string) => { this.inputTerm.emit(value); },
+            (err) => console.log('error' + err),
+            () => console.log('completed')
+        )
 
     }
-    
+
+    ngOnInit() : void { console.log(`NavBar Initialized : Label:${this.text_nb}, Style:${this.theme_nb}`); }
+
+    enableButton() : void { this.isActivated_nb = true; } //ABILITA
+
+    disableButton() : void { this.isActivated_nb = false; } //DISABILITA
+
 }
