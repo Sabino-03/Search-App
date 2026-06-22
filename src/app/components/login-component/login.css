@@ -9,11 +9,8 @@
 
 .h1-title {
     color: color-mix(in srgb-linear, red 33%, green 33%, blue 33%);
-
     display: grid;
-    
     font-size: 25px;
-
     justify-content: center;
 }
 

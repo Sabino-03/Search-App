@@ -28,11 +28,8 @@ export class LoginComponent {
     ) {}
 
     getUserName() : BehaviorSubject<string> {
-
         const usernameNavBar = this.document.getElementById('username-text-box');
-
         if(usernameNavBar) {
-
             fromEvent<KeyboardEvent>(usernameNavBar, 'input')
             .pipe(
                 map((input : KeyboardEvent) => (input.currentTarget as HTMLInputElement).value.toString()),
@@ -45,19 +42,13 @@ export class LoginComponent {
                 (err) => console.log('error' + err),
                 () => console.log('completed')
             )
-
         }
-
         return this.usernameTerm$;
-
     }
 
     getPassWord() : BehaviorSubject<string> {
-
         const passwordNavBar = this.document.getElementById('password-text-box');
-
         if(passwordNavBar) {
-
             fromEvent<KeyboardEvent>(passwordNavBar, 'input')
             .pipe(
                 map((input : KeyboardEvent) => (input.currentTarget as HTMLInputElement).value.toString()),
@@ -70,15 +61,11 @@ export class LoginComponent {
                 (err) => console.log('error' + err),
                 () => console.log('completed')
             )
-
         }
-
         return this.passwordTerm$;
-
     }
 
     logIn() : void {
-
         this.authService.isAuthenticated(this.usernameTerm$.getValue(), this.passwordTerm$.getValue())
         .pipe(
             //skip(1), //SI UTILIZZA skip(1) PERCHÈ isLogged$ NON RISULTA AGGIORNATO => DA ULTIME OPERAZIONI
@@ -89,7 +76,6 @@ export class LoginComponent {
             (err) => console.log('error' + err),
             () => console.log('completed LogIn-Component')
         )
-
     }
 
     logOut() : boolean { return this.authService.removeToken(); }
