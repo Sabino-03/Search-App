@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { BehaviorSubject, fromEvent } from "rxjs";
 import { debounceTime, map, tap } from "rxjs/operators";
 import { AuthService } from "../../services/auth.service";
+import { UserLoggedService } from "../../services/userLogged.service";
 
 @Component({
     selector: 'login-component',
@@ -24,7 +25,8 @@ export class LoginComponent {
         @Inject(DOCUMENT)
         private document : Document,
         private router : Router,
-        private authService : AuthService
+        private authService : AuthService,
+        private userLoggedService : UserLoggedService
     ) {}
 
     getUserName() : BehaviorSubject<string> {
@@ -72,7 +74,7 @@ export class LoginComponent {
             tap((token : boolean) => token ? this.router.navigate(['home']) : this.router.navigate(['']))
         )
         .subscribe(
-            (userToken : boolean) => {},
+            (userToken : boolean) => { this.userLoggedService.setUserLogged(this.usernameTerm$.getValue()); },
             (err) => console.log('error' + err),
             () => console.log('completed LogIn-Component')
         )
