@@ -1,24 +1,14 @@
 import { Injectable } from "@angular/core";
-import { SearchService } from "./search.service";
+import { NumberOfService } from "./numberOf.service";
 
 @Injectable({ providedIn: 'root' })
 export class DeleteService {
 
-  constructor( private searchService : SearchService ) {}
-
-  resetLists() {
-    this.searchService.userList$.next([]);
-    this.searchService.postList$.next([]);
-  }
+  constructor( private numberOfService : NumberOfService ) {}
 
   resetCounters() {
-    this.searchService.numOfUsers = 1;
-    this.searchService.numOfPosts = 1;
-  }
-
-  resetAllSystem() {
-    this.resetLists();
-    this.resetCounters();
+    this.numberOfService.numOfUsers = 0 ;
+    this.numberOfService.numOfPosts = 0 ;
   }
 
 }

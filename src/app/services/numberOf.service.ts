@@ -1,25 +1,27 @@
 import { Injectable } from "@angular/core";
-import { SearchService } from "./search.service";
 
 @Injectable({ providedIn: 'root' })
 export class NumberOfService {
 
-  constructor( private searchService : SearchService ) {}
+  numOfUsers : number = 0 ;
+  numOfPosts : number = 0 ;
 
-  addNumberOfUsers() { this.searchService.numOfUsers ++ }
+  constructor() {}
 
-  subNumberOfUsers() {
-    if(this.searchService.numOfUsers > 0)
-      this.searchService.numOfUsers -- ;
+  addNumberOfUsers() : number { return this.numOfUsers ++ ; }
+
+  subNumberOfUsers() : number {
+    if(this.numOfUsers > 0)
+      return this.numOfUsers -- ;
     else
       throw new Error('Operazione NON Eseguibile');
   }
 
-  addNumberOfPosts() { this.searchService.numOfPosts ++ }
+  addNumberOfPosts() : number { return this.numOfPosts ++ ; }
 
-  subNumberOfPosts() {
-    if(this.searchService.numOfPosts > 0)
-      this.searchService.numOfPosts -- ;
+  subNumberOfPosts() : number {
+    if(this.numOfPosts > 0)
+      return this.numOfPosts -- ;
     else
       throw new Error('Operazione NON Eseguibile');
   }
