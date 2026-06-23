@@ -1,0 +1,17 @@
+.div-logOutComponent {
+    align-items: end;
+    display: flex;
+    justify-content: end;
+
+    height: 100%;
+    width: 100%;
+}
+
+.div-dashBoard {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+
+    height: 100%;
+    width: 100%;
+}

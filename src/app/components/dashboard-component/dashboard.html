@@ -1,0 +1,35 @@
+<div>
+
+  <div class="div-logOutComponent">
+    <hello-component
+    [title]="userLogged"
+    [userLogged]="userLogged" ></hello-component>
+
+    <button-component
+      [isActivated_btn]="true"
+      [label_btn]="'LOGOUT'"
+      [type_btn]="'button'"
+      [size_btn]="'medium'"
+      [variant_btn]="'operations'"
+      (onClick)="onClickLogOut()" ></button-component>
+  </div>
+
+    <div class="div-dashBoard">
+      <navbar-component
+        [isActivated_nb]="true"
+        [text_nb]="' Cerca... '"
+        [theme_nb]="'light'"
+        (inputTerm)="searchTerm = $event" ></navbar-component>
+
+      <button-component
+        [isActivated_btn]="true"
+        [label_btn]="'Cerca ... '"
+        [type_btn]="'button'"
+        [size_btn]="'medium'"
+        [variant_btn]="'searchTerm'"
+        (onClick)="onClickSearch()" ></button-component>
+    </div>
+
+      <router-outlet></router-outlet>
+
+</div>
