@@ -1,23 +1,27 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
-import { HomePageComponent } from './components/HomePageComponent/HomePage.component';
-import { LoginPageComponent } from './components/LoginPageComponent/LoginPage.component';
+import { LoginComponent } from './components/login-component/login.component';
+import { DashBoardComponent } from './components/dashboard-component/dashboard.component';
+import { UsersTableComponent } from './components/usersTable-component/usersTable.component';
+import { PostsTableComponent } from './components/postsTable-component/postsTable.component';
 import { AuthGuard } from './services/authGuard.service';
 
 export const routes : Routes = [
     {
       path: '',
-      component: LoginPageComponent
+      component: LoginComponent
     },
     {
       path: 'home',
-      component: HomePageComponent,
-      canActivate: [AuthGuard],
+      component: DashBoardComponent,
+      canActivate: [ AuthGuard ],
       children: [
-        {}
+        //{ path: '', component: LoadingComponent },
+        { path: 'users', component: UsersTableComponent },
+        { path: 'posts', component: PostsTableComponent }
       ]
     },
     //{path: 'search', component: AppComponent},
@@ -25,18 +29,16 @@ export const routes : Routes = [
 ];
 
 @NgModule({
-  bootstrap: [/*AppComponent*/],
+  bootstrap: [],
   declarations: [],
-  /*exports: [RouterModule],*/
+  /*exports: [ RouterModule ],*/
   imports: [
     BrowserModule,
-    FormsModule,
     HttpClientModule,
+    ReactiveFormsModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [
-    AuthGuard
-  ]
+  providers: [ AuthGuard ]
 })
 
 export class AppModule {}
