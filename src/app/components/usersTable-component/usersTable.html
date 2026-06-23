@@ -1,0 +1,51 @@
+<div>
+
+    <div class="div-operationsBoard" >
+        <h1 class="h1"> Numero Di Utenti : {{this.numberOfService.numOfUsers}} </h1>
+
+        <button-component
+            [isActivated_btn]="true"
+            [label_btn]="' Users + '"
+            [type_btn]="'button'"
+            [size_btn]="'medium'"
+            [variant_btn]="'operations'"
+            (onClick)="addItemsToList()" ></button-component>
+
+        <button-component
+            [isActivated_btn]="true"
+            [label_btn]="'Users - '"
+            [type_btn]="'button'"
+            [size_btn]="'medium'"
+            [variant_btn]="'operations'"
+            (onClick)="subItemsToList()" ></button-component>
+
+        <button-component
+            [isActivated_btn]="true"
+            [label_btn]="'DELETE'"
+            [type_btn]="'button'"
+            [size_btn]="'medium'"
+            [variant_btn]="'deleteTerm'"
+            (onClick)="deleteItemsToList()" ></button-component>
+    </div>
+
+    <div class="div-operationsBoard" >
+        <table class="div-table-layOut" >
+            <thead>
+                <tr>
+                    <th class="th" > Nome </th>
+                    <th class="th" > UserName </th>
+                    <th class="th" > E-Mail </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let user of userArray; index as i; trackBy : trackByName">
+                    <td class="td" > {{user.Nome}} </td>
+                    <td class="td" > {{user.UserName}} </td>
+                    <td class="td" > {{user.Email}} </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

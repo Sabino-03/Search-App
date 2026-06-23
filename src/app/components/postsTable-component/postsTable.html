@@ -1,0 +1,49 @@
+<div>
+
+    <div class="div-operationsBoard" >
+        <h1 class="h1"> Numero Di Posts : {{this.numberOfService.numOfPosts}} </h1>
+
+        <button-component
+            [isActivated_btn]="true"
+            [label_btn]="' Posts + '"
+            [type_btn]="'button'"
+            [size_btn]="'medium'"
+            [variant_btn]="'operations'"
+            (onClick)="addItemsToList()" ></button-component>
+
+        <button-component
+            [isActivated_btn]="true"
+            [label_btn]="'Posts - '"
+            [type_btn]="'button'"
+            [size_btn]="'medium'"
+            [variant_btn]="'operations'"
+            (onClick)="subItemsToList()" ></button-component>
+
+        <button-component
+            [isActivated_btn]="true"
+            [label_btn]="'DELETE'"
+            [type_btn]="'button'"
+            [size_btn]="'medium'"
+            [variant_btn]="'deleteTerm'"
+            (onClick)="deleteItemsToList()" ></button-component>
+    </div>
+
+    <div class="div-operationsBoard" >
+        <table class="div-table-layOut" >
+            <thead>
+                <tr>
+                    <th class="th" > Titolo </th>
+                    <th class="th" > Testo </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let post of postArray; index as i; trackBy : trackByTitle">
+                    <td class="td" > {{post.Titolo}} </td>
+                    <td class="td" > {{post.Testo}} </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
