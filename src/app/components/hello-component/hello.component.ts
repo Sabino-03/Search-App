@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, input, InputSignal, OnInit } from "@angular/core";
 
 @Component({
     selector: 'hello-component', //TAG HTML CHE RAPPRESENTA IL COMPONENTE
@@ -6,13 +6,12 @@ import { Component, Input } from "@angular/core";
     styleUrl: './hello.css' //STILE CSS CHE RAPPRESENTA IL COMPONENTE
 })
 
-export class HelloComponent {
+export class HelloComponent implements OnInit {
 
-  @Input() user : string = '';
-  //DECORATORE CHE CONSENTE DI FAR PASSARE (DA PARTE DI COMPONENTE PADRE) UN VALORE AL COMPONENTE FIGLIO
+  userLogged : InputSignal<string> = input(''); //DECORATORE CHE CONSENTE DI FAR PASSARE (DA PARTE DI COMPONENTE PADRE) UN VALORE AL COMPONENTE FIGLIO
 
-  constructor() {}
+  ngOnInit(): void {
+    console.log(`Benvenuto ${this.userLogged}`);
+  }
 
-  welcome() {}
-  
 }
