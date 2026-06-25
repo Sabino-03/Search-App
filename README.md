@@ -1,5 +1,9 @@
 # SearchApp
 
+SEARCH-APP THAT PROVIDES A LOGIN PAGE AND AN HOME PAGE :
+- LOGIN PAGE RELATED TO AN ENDPOINT FROM AN API-REST;
+- HOME PAGE RELATED TO REUSABLE COMPONENTS (button, navbar) THAT IMPLEMENTS THE SEARCH FROM AN API-REST (list of users, list of posts) IN ORDER TO POPULATE A MODIFIABLE TABLE.
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.11.
 
 ## Development server
