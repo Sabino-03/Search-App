@@ -15,8 +15,6 @@ export class ButtonComponent implements OnInit {
   variant_btn : InputSignal<'log' | 'searchTerm' | 'operations' | 'deleteTerm'> = input.required(); //STILE CSS
   @Output() onClick : EventEmitter<void> = new EventEmitter<void>();
 
-  //constructor() {}
-
   ngOnInit() : void { console.log(`Button Initialized : Label:${this.label_btn}, Style:${this.size_btn}, ${this.variant_btn}`); }
 
   enableButton() : void { this.isActivated_btn = true; } //ABILITA
