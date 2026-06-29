@@ -1,8 +1,8 @@
-import { DOCUMENT } from "@angular/common";
-import { Component, Inject } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
-import { BehaviorSubject, fromEvent } from "rxjs";
-import { debounceTime, map, tap } from "rxjs/operators";
+import { BehaviorSubject, Subject } from "rxjs";
+import { debounceTime, filter, map, takeUntil, tap } from "rxjs/operators";
 import { AuthService } from "../../services/auth.service";
 import { UserLoggedService } from "../../services/userLogged.service";
 
@@ -13,65 +13,71 @@ import { UserLoggedService } from "../../services/userLogged.service";
         '../button-component/button.css',
         './login.css',
         '../navbar-component/navbar.css'
-    ]
+    ],
+    imports: [ ReactiveFormsModule ]
 })
 
-export class LoginComponent {
+export class LoginComponent implements OnInit, OnDestroy {
 
-    usernameTerm$ : BehaviorSubject<string> = new BehaviorSubject('');
-    passwordTerm$ : BehaviorSubject<string> = new BehaviorSubject('');
+    private router = inject(Router);
+    private authService = inject(AuthService);
+    private userLoggedService = inject(UserLoggedService);
 
-    constructor(
-        @Inject(DOCUMENT)
-        private document : Document,
-        private router : Router,
-        private authService : AuthService,
-        private userLoggedService : UserLoggedService
-    ) {}
+    loginForm = new FormGroup({
+        username : new FormControl<string>(''),
+        password : new FormControl<string>('')
+    });
+    destroy$ : Subject<void> = new Subject<void>();
+    usernameTerm$ : BehaviorSubject<string> = new BehaviorSubject<string>('');
+    passwordTerm$ : BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-    getUserName() : BehaviorSubject<string> {
-        const usernameNavBar = this.document.getElementById('username-text-box');
-        if(usernameNavBar) {
-            fromEvent<KeyboardEvent>(usernameNavBar, 'input')
-            .pipe(
-                map((input : KeyboardEvent) => (input.currentTarget as HTMLInputElement).value.toString()),
-                //toLowerCase_Replace(),
-                debounceTime(1000),
-                tap((value : string) => console.log('USERNAME : ' + value))
-            )
-            .subscribe(
-                (value : string) => { this.usernameTerm$.next(value); },
-                (err) => console.log('error' + err),
-                () => console.log('completed')
-            )
-        }
-        return this.usernameTerm$;
+    ngOnInit() : void {
+        this.getUserName();
+        this.getPassWord();
     }
 
-    getPassWord() : BehaviorSubject<string> {
-        const passwordNavBar = this.document.getElementById('password-text-box');
-        if(passwordNavBar) {
-            fromEvent<KeyboardEvent>(passwordNavBar, 'input')
-            .pipe(
-                map((input : KeyboardEvent) => (input.currentTarget as HTMLInputElement).value.toString()),
-                //toLowerCase_Replace(),
-                debounceTime(1000),
-                tap((value : string) => console.log('PASSWORD : ' + value))
-            )
-            .subscribe(
-                (value : string) => { this.passwordTerm$.next(value); },
-                (err) => console.log('error' + err),
-                () => console.log('completed')
-            )
-        }
-        return this.passwordTerm$;
+    ngOnDestroy() : void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
-    logIn() : void {
+    getUserName() : void {
+        this.loginForm.get('username')?.valueChanges
+        .pipe(
+            map((inputTerm : string | null) => inputTerm ? inputTerm : ''),
+            filter((usernameTerm : string) => usernameTerm.length > 3),
+            debounceTime(1000),
+            tap((usernameTerm : string) => console.log('USERNAME : ' + usernameTerm)),
+            takeUntil(this.destroy$) //ATTIVAZIONE : EMISSIONE DI VALORE DA PARTE DI destroy$, takeUntil EFFETTUA subscribe SILENZIOSA
+        )
+        .subscribe(
+            (usernameTerm : string) => { this.usernameTerm$.next(usernameTerm); },
+            (err) => { throw new Error('error' + err) },
+            () => console.log('getUserName() completed')
+        )
+    }
+
+    getPassWord() : void {
+        this.loginForm.get('password')?.valueChanges
+        .pipe(
+            map((inputTerm : string | null) => inputTerm ? inputTerm : ''),
+            filter((passwordTerm : string) => passwordTerm.length > 0),
+            debounceTime(1000),
+            tap((passwordTerm : string) => console.log('USERNAME : ' + passwordTerm)),
+            takeUntil(this.destroy$) //ATTIVAZIONE : EMISSIONE DI VALORE DA PARTE DI destroy$, takeUntil EFFETTUA subscribe SILENZIOSA
+        )
+        .subscribe(
+            (passwordTerm : string) => { this.passwordTerm$.next(passwordTerm); },
+            (err) => { throw new Error('error' + err) },
+            () => console.log('getUserName() completed')
+        )
+    }
+
+    onSubmit() : void {
         this.authService.isAuthenticated(this.usernameTerm$.getValue(), this.passwordTerm$.getValue())
         .pipe(
-            //skip(1), //SI UTILIZZA skip(1) PERCHÈ isLogged$ NON RISULTA AGGIORNATO => DA ULTIME OPERAZIONI
-            tap((token : boolean) => token ? this.router.navigate(['home']) : this.router.navigate(['']))
+            tap((token : boolean) => token ? this.router.navigate(['home']) : false),
+            takeUntil(this.destroy$) //ATTIVAZIONE : EMISSIONE DI VALORE DA PARTE DI destroy$, takeUntil EFFETTUA subscribe SILENZIOSA
         )
         .subscribe(
             (userToken : boolean) => { this.userLoggedService.setUserLogged(this.usernameTerm$.getValue()); },

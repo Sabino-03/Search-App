@@ -1,14 +1,28 @@
 <div class="div-logIn-route" >
 
-    <h1 class="h1-title" >Search-App</h1>
+    <h1 class="h1-title" > Search-App </h1>
 
-        <div class="div-logIn-component" >
+        <div>
+            <form class="div-logIn-component" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <input
+                    class="log-NavBar"
+                    id="username-text-box"
+                    type="text"
+                    placeholder="USERNAME..."
+                    formControlName="username" >
 
-            <input class="log-NavBar" id="username-text-box" type="text" placeholder="USERNAME..." (input)="getUserName()" >
+                <input
+                    class="log-NavBar"
+                    id="password-text-box"
+                    type="text"
+                    placeholder="PASSWORD..."
+                    formControlName="password" >
 
-            <input class="log-NavBar" id="password-text-box" type="text" placeholder="PASSWORD..." (input)="getPassWord()" >
-            
-            <button class="log-Button" id="loginButton" type="button" (click)="logIn()" routerlink="/home" > LOGIN </button>
-
+                    <button
+                        class="log-Button"
+                        id="loginButton"
+                        type="submit"
+                        routerlink="/home" > LOGIN </button>
+            </form>
         </div>
 </div>
