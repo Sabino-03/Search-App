@@ -19,11 +19,15 @@ import { UserMod } from "../../models/userMod";
 
 export class UsersTableComponent implements OnInit {
 
+    public numOfUsers : number;
+
     /*private deleteService = inject(DeleteService);*/
     private numberOfService = inject(NumberOfService);
     private searchService = inject(SearchService);
 
     userArray : UserMod[] = [];
+
+    constructor() { this.numOfUsers = this.numberOfService.getNumberOfUsers(); }
 
     ngOnInit() : void {
         this.deleteItemsToList();
@@ -37,7 +41,7 @@ export class UsersTableComponent implements OnInit {
             toArray()
         )
         .subscribe(
-            (list : UserMod[]) => { this.userArray = list; },
+            (list : UserMod[]) => { this.userArray = list; this.numOfUsers = this.userArray.length; },
             (err) => console.log('error' + err),
             () => console.log('completed')
         )
@@ -52,7 +56,7 @@ export class UsersTableComponent implements OnInit {
             toArray()
         )
         .subscribe(
-            (list : UserMod[]) => { this.userArray = list; },
+            (list : UserMod[]) => { this.userArray = list; this.numOfUsers = this.userArray.length; },
             (err) => console.log('error' + err),
             () => console.log('completed')
         )
@@ -68,7 +72,7 @@ export class UsersTableComponent implements OnInit {
             toArray()
         )
         .subscribe(
-            (list : UserMod[]) => { this.userArray = list; },
+            (list : UserMod[]) => { this.userArray = list; this.numOfUsers = this.userArray.length; },
             (err) => console.log('error' + err),
             () => console.log('completed')
         )

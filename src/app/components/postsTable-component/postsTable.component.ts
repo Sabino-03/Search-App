@@ -19,11 +19,15 @@ import { PostMod } from "../../models/postMod";
 
 export class PostsTableComponent implements OnInit {
 
+    public numOfPosts : number;
+
     /*private deleteService = inject(DeleteService);*/
     private numberOfService = inject(NumberOfService);
     private searchService = inject(SearchService);
 
     postArray : PostMod[] = [];
+
+    constructor() { this.numOfPosts = this.numberOfService.getNumberOfPosts(); }
 
     ngOnInit() : void {
         this.deleteItemsToList();
@@ -37,7 +41,7 @@ export class PostsTableComponent implements OnInit {
             toArray()
         )
         .subscribe(
-            (list : PostMod[]) => { this.postArray = list; },
+            (list : PostMod[]) => { this.postArray = list; this.numOfPosts = this.postArray.length; },
             (err) => console.log('error' + err),
             () => console.log('completed')
         )
@@ -52,7 +56,7 @@ export class PostsTableComponent implements OnInit {
             toArray()
         )
         .subscribe(
-            (list : PostMod[]) => { this.postArray = list; },
+            (list : PostMod[]) => { this.postArray = list; this.numOfPosts = this.postArray.length; },
             (err) => console.log('error' + err),
             () => console.log('completed')
         )
@@ -68,7 +72,7 @@ export class PostsTableComponent implements OnInit {
             toArray()
         )
         .subscribe(
-            (list : PostMod[]) => { this.postArray = list; },
+            (list : PostMod[]) => { this.postArray = list; this.numOfPosts = this.postArray.length; },
             (err) => console.log('error' + err),
             () => console.log('completed')
         )
