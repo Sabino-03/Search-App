@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, of } from 'rxjs';
 import { map, switchMap, toArray } from 'rxjs/operators';
 import { User } from '../models/user';
@@ -10,10 +10,10 @@ import { PostMod } from '../models/postMod';
 @Injectable({ providedIn: 'root' })
 export class SearchService {
 
+  private http = inject(HttpClient);
+
   userList$ : BehaviorSubject<UserMod[]> = new BehaviorSubject<UserMod[]>([]);
   postList$ : BehaviorSubject<PostMod[]> = new BehaviorSubject<PostMod[]>([]);
-
-  constructor( private http : HttpClient ) {}
 
   onClickSearch( inputTerm : string ) : void {
     switch (inputTerm) {
