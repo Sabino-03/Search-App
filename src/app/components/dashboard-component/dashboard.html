@@ -14,7 +14,7 @@
       (onClick)="onClickLogOut()" ></button-component>
   </div>
 
-    <form class="div-dashBoard" (ngSubmit)="onSubmit()">
+    <div class="div-dashBoard">
       <navbar-component
         [isActivated_nb]="true"
         [text_nb]="' Cerca... '"
@@ -27,8 +27,8 @@
         [type_btn]="'button'"
         [size_btn]="'medium'"
         [variant_btn]="'searchTerm'"
-        (onClick)="onClickSearch()" ></button-component>
-    </form>
+        (onClick)="onSubmit()" ></button-component>
+    </div>
 
       <router-outlet></router-outlet>
 
