@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -8,6 +8,7 @@ import { DashBoardComponent } from './components/dashboard-component/dashboard.c
 import { UsersTableComponent } from './components/usersTable-component/usersTable.component';
 import { PostsTableComponent } from './components/postsTable-component/postsTable.component';
 import { AuthGuard } from './services/authGuard.service';
+import { AuthInterceptor } from './services/interceptors/auth.interceptor';
 
 export const routes : Routes = [
     {
@@ -38,7 +39,7 @@ export const routes : Routes = [
     ReactiveFormsModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [ AuthGuard ]
+  providers: [ provideHttpClient(withInterceptors([AuthInterceptor])) ]
 })
 
-export class AppModule {}
+export class AppModule {} //NON IMPORTATA
