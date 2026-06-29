@@ -1,8 +1,8 @@
 import { NgFor } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { switchMap, take, toArray } from "rxjs";
 import { ButtonComponent } from "../button-component/button.component";
-import { DeleteService } from "../../services/delete.service";
+/*import { DeleteService } from "../../services/delete.service";*/
 import { NumberOfService } from "../../services/numberOf.service";
 import { SearchService } from "../../services/search.service";
 import { PostMod } from "../../models/postMod";
@@ -17,15 +17,17 @@ import { PostMod } from "../../models/postMod";
     ]
 })
 
-export class PostsTableComponent {
+export class PostsTableComponent implements OnInit {
+
+    /*private deleteService = inject(DeleteService);*/
+    private numberOfService = inject(NumberOfService);
+    private searchService = inject(SearchService);
 
     postArray : PostMod[] = [];
 
-    constructor(
-        public deleteService : DeleteService,
-        public numberOfService : NumberOfService,
-        public searchService : SearchService
-    ) { this.deleteItemsToList(); }
+    ngOnInit() : void {
+        this.deleteItemsToList();
+    }
 
     addItemsToList() : PostMod[] {
         this.searchService.postList$
@@ -58,7 +60,7 @@ export class PostsTableComponent {
     }
 
     deleteItemsToList() : PostMod[] {
-        this.deleteService.resetCounters();
+        this.numberOfService.reset();
         this.searchService.postList$
         .pipe(
             switchMap((posts : PostMod[]) => posts),

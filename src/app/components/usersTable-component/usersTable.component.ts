@@ -1,8 +1,8 @@
 import { NgFor } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { switchMap, take, toArray } from "rxjs";
 import { ButtonComponent } from "../button-component/button.component";
-import { DeleteService } from "../../services/delete.service";
+/*import { DeleteService } from "../../services/delete.service";*/
 import { NumberOfService } from "../../services/numberOf.service";
 import { SearchService } from "../../services/search.service";
 import { UserMod } from "../../models/userMod";
@@ -17,15 +17,17 @@ import { UserMod } from "../../models/userMod";
     ]
 })
 
-export class UsersTableComponent {
+export class UsersTableComponent implements OnInit {
+
+    /*private deleteService = inject(DeleteService);*/
+    private numberOfService = inject(NumberOfService);
+    private searchService = inject(SearchService);
 
     userArray : UserMod[] = [];
 
-    constructor(
-        public deleteService : DeleteService,
-        public numberOfService : NumberOfService,
-        public searchService : SearchService
-    ) { this.deleteItemsToList(); }
+    ngOnInit() : void {
+        this.deleteItemsToList();
+    }
 
     addItemsToList() : UserMod[] {
         this.searchService.userList$
@@ -58,7 +60,7 @@ export class UsersTableComponent {
     }
 
     deleteItemsToList() : UserMod[] {
-        this.deleteService.resetCounters();
+        this.numberOfService.reset();
         this.searchService.userList$
         .pipe(
             switchMap((users : UserMod[]) => users),
