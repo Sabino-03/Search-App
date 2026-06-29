@@ -1,24 +1,23 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import { first, map, switchMap, skip, tap, toArray } from "rxjs/operators";
+import { first, map, switchMap, tap, toArray } from "rxjs/operators";
 import { User } from "../models/user";
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
 
+    private http = inject(HttpClient);
+
     isLoggedIn$ : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     //userLoggedIn$ : BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-    constructor( private http : HttpClient ) {}
-
     isAuthenticated(username : string, password : string) : BehaviorSubject<boolean> {
-
         this.isLoggedIn$
         .pipe(
-            tap(() => {
-                this.http.get<User[]>(`https://jsonplaceholder.typicode.com/users/`)
+            switchMap(() => {
+                return this.http.get<User[]>(`https://jsonplaceholder.typicode.com/users/`)
                 .pipe(
                     switchMap((users : User[]) => users),
                     map((user : User) => {
@@ -28,11 +27,9 @@ export class AuthService {
                         }
                     }),
                     toArray(),
-                    map((userList : { UserName : string, PassWord : string }[]) => {
-
+                    map((userList : { UserName : string, PassWord : string}[] ) => {
                         const userFound = userList.find(listOf => listOf.UserName === username);
                         let userToken : boolean = false;
-
                         if(userFound) {
                             if(userFound.PassWord === password) {
                                 console.log('User Logged');
@@ -48,18 +45,11 @@ export class AuthService {
                             localStorage.setItem('token', 'false');
                             throw new Error('Credenziali Errate');
                         }
-
                         return userToken;
-
                     })
                 )
-                .subscribe(
-                    (userToken : boolean) => { return this.isLoggedIn$.next(userToken); },
-                    (err) => console.log('error' + err),
-                    () => console.log('')
-                )
             }),
-            skip(1), //SI UTILIZZA skip(1) PERCHÈ isLogged$ NON RISULTA AGGIORNATO => DA ULTIME OPERAZIONI
+            tap((userToken : boolean) => this.isLoggedIn$.next(userToken)),
             first() //COMPLETAMENTO
         )
         .subscribe(
@@ -67,19 +57,16 @@ export class AuthService {
             (err) => console.log('error' + err),
             () => console.log('completed AuthService')
         )
-
         return this.isLoggedIn$;
-
     }
 
     getToken() : boolean { return this.isLoggedIn$.getValue(); /*return localStorage.getItem('token');*/ }
 
     removeToken() : boolean {
-
         this.isLoggedIn$.next(false);
+        console.log('User NON Connesso : ' + false);
         localStorage.removeItem('token');
         return this.isLoggedIn$.getValue();
-
     }
 
 }
