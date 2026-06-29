@@ -1,40 +1,15 @@
-import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from "@angular/router";
-import { Observable } from "rxjs";
-import { catchError, first, take, tap } from "rxjs/operators";
+import { inject } from "@angular/core";
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from "@angular/router";
 import { AuthService } from "./auth.service";
 
-@Injectable({providedIn: 'root'})
-export class AuthGuard implements CanActivate {
+export const AuthGuard : CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
 
-    constructor( private authService : AuthService ) {}
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
-    canActivate( //METODO INVOCATO AUTOMATICAMENTE DA PARTE DI ROUTER
-        route : ActivatedRouteSnapshot, //DATI PER LA ROUTE
-        state : RouterStateSnapshot, // URL PER LA ROUTE
-    ) : Observable<boolean> {
+  console.log(`Router URL : ${route.url}`);
+  console.log(`State URL (URL Richiesto) : ${state.url}`);
 
-        console.log(`Router Data : ${route.data}`);
-        console.log(`Router Params : ${route.params}`);
-        console.log(`Router URL : ${route.url}`);
-        console.log(`State Root : ${state.root}`);
-        console.log(`State URL (URL Richiesto) : ${state.url}`);
-
-        return this.authService.isLoggedIn$
-        .pipe(
-          first(), //COMPLETAMENTO
-          tap((isAuth : boolean) => {
-            if(isAuth === true) {
-              console.log('Utente Autenticato');
-              return true;
-            }
-            else {
-              console.log('Utente NON Autenticato');
-              return false;
-            }
-          })
-        )
-
-    }
+  return authService.isLoggedIn$.getValue() ? true : router.createUrlTree(['']);
 
 }
